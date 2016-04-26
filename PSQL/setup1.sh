@@ -1,6 +1,8 @@
-sudo add-apt-repository ppa:webupd8team/java && apt-get update
-sudo apt-get install libfftw3-bin libfftw3-dev lsscsi vim curl git python-software-properties zsh oracle-java8-installer oracle-java8-set-default erlang erlang-doc geomview pip libpq-dev python-dev
-sudo apt-get install -y libhttp-parser2.1 libicu52 libpq
+sudo add-apt-repository ppa:webupd8team/java 
+sudo apt-get install oracle-java8-installer oracle-java8-set-default 
+sudo apt-get install libfftw3-bin libfftw3-dev lsscsi 
+sudo apt-get install vim curl git python-software-properties python-pip python-dev
+sudo apt-get install erlang erlang-doc 
 pip install setuptools 
 pip install psycopg2
 sudo wget -P  /datadrive  http://reddit-data.s3.amazonaws.com/RS_full_corpus.bz2 
