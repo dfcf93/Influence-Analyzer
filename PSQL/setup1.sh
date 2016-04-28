@@ -1,6 +1,7 @@
 sudo add-apt-repository ppa:webupd8team/java 
 sudo apt-get upgrade
 sudo apt-get update
+sudo apt-get install xclip
 sudo apt-get install oracle-java8-installer oracle-java8-set-default 
 sudo apt-get install libfftw3-bin libfftw3-dev lsscsi 
 sudo apt-get install vim curl git python-software-properties python-pip python-dev
