@@ -15,15 +15,18 @@ class Config:
         return self.corpus + ',' + self.dbhost + ',' + self.dbname + ',' + self.dbuser + ',' +  self.dbpassword
     def connprep(self):
 	return 'dbname=' + self.dbname + ' user=' + self.dbuser + ' host=' + self.dbhost + ' password=' + self.dbpassword 
-if __name__ == '__main__':
-    f = open('config.csv', 'r')
-    config = csv.reader(f, delimiter=',').next()
+def TestDB(config):
     c = Config(config[0], config[1], config[2], config[3], config[4])
+    print(c.connprep())
     conn = psycopg2.connect(c.connprep())
     conn.autocommit = True
-    print(conn.str)
     cur = conn.cursor()
     cur.execute("SELECT * FROM TESTS;")
     print cur.query
     for record in cur:
         print record
+if __name__ == '__main__':
+    f = open('config.csv', 'r')
+    config = csv.reader(f, delimiter=',').next()
+    TestDB(config)
+
