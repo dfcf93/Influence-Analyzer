@@ -12,6 +12,7 @@ install:
 	@sudo apt-get install libpq-dev postgresql
 	@sudo pip install setuptools
 	@sudo pip install psycopg2
+	@sudo pip install --update pip
 download:
 	@sudo wget -p /datadrive http://reddit-data.s3.amazonaws.com/RS_full_corpus.bz2
 	@sudo bunzip2 /datadrive/RS_full_corpus.bz2	
