@@ -1,10 +1,18 @@
 from multiprocessing import Process, Manager
 import time
-import itertools
+import itertools 
 import psycopg2
-import csv
-import json
-import sys,getopt
+import sys,getopt,json, csv
+def TestDB(config):
+    c = Config(config[0], config[1], config[2], config[3], config[4])
+    print(c.connprep())
+    conn = psycopg2.connect(c.connprep())
+    conn.autocommit = True
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM TESTS;")
+    print cur.query
+    for record in cur:
+        print record
 class Config:
     def __init__(self, corpus, dbhost, dbname, dbuser, dbpassword):
         self.corpus = corpus
@@ -16,56 +24,34 @@ class Config:
         return self.corpus + ',' + self.dbhost + ',' + self.dbname + ',' + self.dbuser + ',' +  self.dbpassword
     def connprep(self):
 	return 'dbname=' + self.dbname + ' user=' + self.dbuser + ' host=' + self.dbhost + ' password=' + self.dbpassword 
-def do_work(in_queue, out_list):
-    while True:
-        item = in_queue.get()
-        line_no, line = item
-
-        # exit signal 
-        if line == None:
-            return
-
-        # fake work
-        time.sleep(.5)
-        result = (line_no, line)
-
-        out_list.append(result)
-
-def TestDB(config):
-    c = Config(config[0], config[1], config[2], config[3], config[4])
-    print(c.connprep())
+def buildquery(line):
+    return line
+def insert(config, line):
     conn = psycopg2.connect(c.connprep())
-    conn.autocommit = True
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM TESTS;")
-    print cur.query
-    for record in cur:
-        print record
+    cursor = conn.cursor()
+    cursor.execute(buildquery(line))
+    cursor.close()
+    connection.commit()
 def LoadIntoDB(threads, subreddit, config):
-
-    manager = Manager()
-    results = manager.list()
-    work = manager.Queue(threads)
-
-    # start for workers    
     pool = []
+    manager = Manager()
+    work = manager.Queue(threads)
     for i in xrange(threads):
-        p = Process(target=, args=(work, results))
+        p = Process(target=insert, args=(config, line))
         p.start()
         pool.append(p)
-
+    with open(c.corpus, 'r') as f:
+        for line in f:
+           iters = itertools.chain(f, (None,)*num_workers)
+           for num_and_line in enumerate(iters):
+            work.put(num_and_line)
     # produce data
     with open("source.txt") as f:
         iters = itertools.chain(f, (None,)*num_workers)
-        for num_and_line in enumerate(iters):
-            work.put(num_and_line)
-
+        for line in enumerate(iters):
+            work.put(line)
     for p in pool:
         p.join()
-
-    # get the results
-    # example:  [(1, "foo"), (10, "bar"), (0, "start")]
-    print sorted(results)
 if __name__ == '__main__':
    threads = ''
    subreddit = ''
@@ -88,8 +74,8 @@ if __name__ == '__main__':
    i = 0
    with open(c.corpus, 'r') as f:
       for line in f:
-         i+=1
-         if i ==5:
+        i+=1
+        if i ==5:
             exit
          else:
             print(line)
