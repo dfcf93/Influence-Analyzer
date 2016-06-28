@@ -1,9 +1,6 @@
 dothis:
 	echo "this"
-dothat:
-	@echo "that"
 install:
-	@echo "this is where installation would happen"
 	@sudo add-apt-repository ppa:webupd8team/java
 	@sudo apt-get upgrade
 	@sudo apt-get update
